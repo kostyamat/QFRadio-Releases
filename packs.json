@@ -1,6 +1,6 @@
 {
  "format_version": 2,
- "generated_at": "2026-09-07T00:27:36Z",
+ "generated_at": "2026-09-07T13:51:38Z",
  "release_tag": "packs-2026-09-06",
  "packs": [
   {
@@ -46,6 +46,17 @@
    "generated_at": null,
    "brands": 119,
    "transmitters": 593
+  },
+  {
+   "country": "BA",
+   "country_name": "Bosnia and Herzegovina",
+   "file": "RadioLogos_Bosnia_Optimized.zip",
+   "url": "https://github.com/kostyamat/QFRadio-Releases/releases/download/packs-2026-09-06/RadioLogos_Bosnia_Optimized.zip",
+   "size": 1406279,
+   "sha256": "ac5be2d440b66e08832657ecebb6e3f1538f7275070026f63b5fad7220353665",
+   "generated_at": null,
+   "brands": 25,
+   "transmitters": 38
   },
   {
    "country": "BG",
@@ -321,6 +332,17 @@
    "generated_at": null,
    "brands": 80,
    "transmitters": 6961
+  },
+  {
+   "country": "RS",
+   "country_name": "Serbia",
+   "file": "RadioLogos_Serbia_Optimized.zip",
+   "url": "https://github.com/kostyamat/QFRadio-Releases/releases/download/packs-2026-09-06/RadioLogos_Serbia_Optimized.zip",
+   "size": 2183550,
+   "sha256": "00875530d9c2fb7775eb073bb2883154cc96af1306d49f3e309c8e9ea3da097d",
+   "generated_at": null,
+   "brands": 52,
+   "transmitters": 222
   },
   {
    "country": "SK",
