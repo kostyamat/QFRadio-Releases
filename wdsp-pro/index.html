@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wDSP Pro — Studio Audio for QF Head Units</title>
+  <meta name="description" content="wDSP Pro unlocks hardware-level automotive acoustic processing, cabin measurement with the head unit's built-in microphone, independent Front/Rear 16-band EQ, and enhanced MCU audio features for QF head units.">
+  <link rel="icon" type="image/png" href="app_icon.png">
+  <style>
+    :root {
+      --bg-base: #080B10;
+      --bg-surface: #101520;
+      --bg-card: rgba(19, 25, 38, 0.78);
+      --bg-card-hover: rgba(26, 35, 54, 0.92);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(0, 229, 255, 0.35);
+      --accent-cyan: #00E5FF;
+      --accent-blue: #3D8BFF;
+      --accent-purple: #8C52FF;
+      --accent-amber: #FFB300;
+      --accent-green: #00E676;
+      --text-primary: #F0F4F8;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --font-stack: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      --max-width: 1200px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-stack);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(0, 229, 255, 0.07) 0%, transparent 45%),
+        radial-gradient(circle at 85% 60%, rgba(61, 139, 255, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 50% 90%, rgba(140, 82, 255, 0.05) 0%, transparent 55%);
+      background-attachment: fixed;
+    }
+
+    a {
+      color: var(--accent-cyan);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    a:hover {
+      color: #69F0AE;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* HEADER & NAV */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(8, 11, 16, 0.82);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .brand img {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      box-shadow: 0 4px 14px rgba(0, 229, 255, 0.25);
+    }
+
+    .brand-tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.2), rgba(61, 139, 255, 0.2));
+      border: 1px solid var(--border-accent);
+      color: var(--accent-cyan);
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+      font-weight: 500;
+    }
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .lang-switcher {
+      display: flex;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 3px;
+      cursor: pointer;
+    }
+
+    .lang-btn {
+      padding: 4px 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .lang-btn.active {
+      background: var(--accent-cyan);
+      color: #080B10;
+      box-shadow: 0 2px 8px rgba(0, 229, 255, 0.35);
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 24px;
+      font-size: 0.96rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #00E5FF 0%, #0091EA 100%);
+      color: #080B10;
+      box-shadow: 0 4px 18px rgba(0, 229, 255, 0.35);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0, 229, 255, 0.55);
+      color: #000;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+      color: #fff;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      padding: 72px 0 60px;
+      text-align: center;
+      position: relative;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 30px;
+      background: rgba(0, 229, 255, 0.08);
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      color: var(--accent-cyan);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 8px var(--accent-green);
+    }
+
+    .hero h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+      background: linear-gradient(180deg, #FFFFFF 20%, #94A3B8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 0 auto 36px;
+      font-size: 1.18rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 50px;
+    }
+
+    /* SCREENSHOT SHOWCASE */
+    .showcase-wrapper {
+      position: relative;
+      margin: 0 auto;
+      max-width: 1040px;
+      border-radius: var(--radius-lg);
+      padding: 8px;
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.3) 0%, rgba(61, 139, 255, 0.1) 50%, rgba(140, 82, 255, 0.2) 100%);
+      box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.8), 0 0 50px rgba(0, 229, 255, 0.15);
+    }
+
+    .showcase-inner {
+      border-radius: 16px;
+      overflow: hidden;
+      background: #000;
+      line-height: 0;
+    }
+
+    .showcase-inner img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    /* QUICK PILL STATS */
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-top: 50px;
+      text-align: left;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .stat-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* SECTION STYLES */
+    section {
+      padding: 90px 0;
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 740px;
+      margin: 0 auto 54px;
+    }
+
+    .section-eyebrow {
+      text-transform: uppercase;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--accent-cyan);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 2.3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+
+    .section-desc {
+      font-size: 1.08rem;
+      color: var(--text-secondary);
+    }
+
+    /* GRID FEATURES */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      backdrop-filter: blur(10px);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feature-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-accent);
+      transform: translateY(-4px);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+      background: rgba(0, 229, 255, 0.12);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+    }
+
+    .feature-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .feature-card p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* DUAL SPLIT SHOWCASE (IMAGE + TEXT) */
+    .split-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+      margin-bottom: 80px;
+    }
+
+    .split-row.reverse {
+      direction: rtl;
+    }
+    .split-row.reverse > * {
+      direction: ltr;
+    }
+
+    .split-img-box {
+      border-radius: var(--radius-lg);
+      padding: 6px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(0, 229, 255, 0.2));
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+    }
+
+    .split-img-box img {
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      display: block;
+    }
+
+    .split-text h3 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 18px;
+      color: #fff;
+    }
+
+    .split-text p {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      margin-bottom: 22px;
+      line-height: 1.65;
+    }
+
+    .checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.98rem;
+      color: var(--text-primary);
+    }
+
+    .check-bullet {
+      color: var(--accent-green);
+      font-weight: 800;
+      font-size: 1.1rem;
+      line-height: 1.2;
+    }
+
+    /* COMPARISON TABLE / CARDS */
+    .compare-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .compare-card {
+      border-radius: var(--radius-md);
+      padding: 32px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .compare-card.pro {
+      border-color: var(--accent-cyan);
+      background: linear-gradient(180deg, rgba(0, 229, 255, 0.08) 0%, rgba(19, 25, 38, 0.9) 100%);
+      box-shadow: 0 0 30px rgba(0, 229, 255, 0.12);
+    }
+
+    .compare-card h4 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .compare-card .compare-subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .compare-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .compare-list li {
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-cross {
+      color: #EF4444;
+      font-weight: 700;
+    }
+    .icon-check {
+      color: var(--accent-green);
+      font-weight: 700;
+    }
+
+    /* TRIAL & GETTING STARTED */
+    .cta-box {
+      border-radius: var(--radius-lg);
+      padding: 60px 40px;
+      background: linear-gradient(135deg, rgba(16, 21, 32, 0.95) 0%, rgba(19, 32, 54, 0.9) 100%);
+      border: 1px solid var(--border-accent);
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 229, 255, 0.1);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .cta-box h2 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+
+    .cta-box p {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      max-width: 660px;
+      margin: 0 auto 36px;
+    }
+
+    .cta-links {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    /* AUTHORS & COMMUNITY */
+    .community-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      max-width: 880px;
+      margin: 40px auto 0;
+    }
+
+    .community-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      transition: var(--transition);
+    }
+    .community-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+
+    .community-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(61, 139, 255, 0.15);
+      color: var(--accent-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .community-info h5 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .community-info p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      background: #05070A;
+      padding: 50px 0 40px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-creds {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .footer-creds strong {
+      color: var(--text-primary);
+    }
+
+    /* RESPONSIVE BREAKPOINTS */
+    @media (max-width: 960px) {
+      .hero h1 { font-size: 2.5rem; }
+      .quick-stats { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .split-row { grid-template-columns: 1fr; gap: 30px; }
+      .split-row.reverse { direction: ltr; }
+      .compare-container { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 2.05rem; }
+      .hero p { font-size: 1rem; }
+      .quick-stats { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .community-cards { grid-template-columns: 1fr; }
+      .cta-box { padding: 40px 20px; }
+      .cta-box h2 { font-size: 1.8rem; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container nav-inner">
+      <div class="brand">
+        <img src="app_icon.png" alt="wDSP Pro Icon">
+        <span>wDSP Pro</span>
+        <span class="brand-tag">Studio DSP</span>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="#about" data-i18n="nav_about">About</a></li>
+        <li><a href="#sound" data-i18n="nav_sound">Acoustics</a></li>
+        <li><a href="#mcu" data-i18n="nav_mcu">Enhanced MCU</a></li>
+        <li><a href="#conveniences" data-i18n="nav_conveniences">Conveniences</a></li>
+        <li><a href="#community" data-i18n="nav_community">Community</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <div class="lang-switcher" id="langToggle">
+          <button class="lang-btn active" id="btnEn">EN</button>
+          <button class="lang-btn" id="btnUk">UK</button>
+        </div>
+        <a href="https://github.com/kostyamat/QFRadio-Releases/releases/tag/wdsp-pro-v1.2.1" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.88rem;" data-i18n="btn_get_pro">Get wDSP Pro</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="container">
+      <div class="badge-pill">
+        <span class="badge-dot"></span>
+        <span data-i18n="hero_pill">Built Specifically for QF Head Units · Professional Car Audio</span>
+      </div>
+
+      <h1 data-i18n="hero_title">Transform Your Car Interior<br>Into a True Concert Hall</h1>
+      <p data-i18n="hero_desc">wDSP Pro bridges digital sound processing with your car's physical hardware: cabin auto-calibration via the head unit's built-in microphone, independent Front and Rear equalizers, adjustable Q-factor, and hardware loudness compensation.</p>
+
+      <div class="hero-buttons">
+        <a href="https://github.com/kostyamat/QFRadio-Releases/releases/tag/wdsp-pro-v1.2.1" class="btn btn-primary" data-i18n="hero_btn_dl">Download Release v1.2.1</a>
+        <a href="https://t.me/kostyamat_dev/992" class="btn btn-secondary" target="_blank" rel="noopener" data-i18n="hero_btn_chat">Discussion & Telegram</a>
+      </div>
+
+      <div class="showcase-wrapper">
+        <div class="showcase-inner">
+          <img src="screenshot_eq.png" alt="wDSP Pro Independent 16-Band Equalizer">
+        </div>
+      </div>
+
+      <div class="quick-stats">
+        <div class="stat-card">
+          <div class="stat-number">16 × 2</div>
+          <div class="stat-label" data-i18n="stat_eq_title">Front & Rear Split EQ</div>
+          <div class="stat-sub" data-i18n="stat_eq_sub">16 independent bands for each row</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">Auto</div>
+          <div class="stat-label" data-i18n="stat_mic_title">Microphone Calibration</div>
+          <div class="stat-sub" data-i18n="stat_mic_sub">Measures car cabin acoustics</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">LR4</div>
+          <div class="stat-label" data-i18n="stat_sub_title">Crossover & Phase</div>
+          <div class="stat-sub" data-i18n="stat_sub_sub">Seamless subwoofer integration</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">0–60m</div>
+          <div class="stat-label" data-i18n="stat_acc_title">Ignition Off Delay</div>
+          <div class="stat-sub" data-i18n="stat_acc_sub">Keeps unit awake 0–60 min after ignition off</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 1: WHAT IS WDSP PRO -->
+  <section id="about">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow" data-i18n="sec1_eyebrow">Studio-Grade Audio In Your Car</div>
+        <h2 class="section-title" data-i18n="sec1_title">Why Stock Android Audio Sounds Flat</h2>
+        <p class="section-desc" data-i18n="sec1_desc">Standard car stereos treat all car speakers as simple domestic boxes in a symmetrical living room. But a car cabin has reflective glass, sound-absorbing seats, and speakers buried near your ankles. wDSP Pro changes everything.</p>
+      </div>
+
+      <div class="split-row">
+        <div class="split-text">
+          <h3 data-i18n="mic_title">Microphone Cabin Measurement & Auto-Tuning</h3>
+          <p data-i18n="mic_desc">The app measures cabin acoustics using the head unit's built-in microphone. Just sit in the driver's seat and run the acoustic sweep test.</p>
+          <ul class="checklist">
+            <li><span class="check-bullet">✓</span> <span data-i18n="mic_f1">Detects annoying interior resonance and glass reflections</span></li>
+            <li><span class="check-bullet">✓</span> <span data-i18n="mic_f2">Automatically generates a customized acoustic compensation curve</span></li>
+            <li><span class="check-bullet">✓</span> <span data-i18n="mic_f3">Fine-tunes balance specifically for your car body style (sedan, SUV, wagon)</span></li>
+            <li><span class="check-bullet">✓</span> <span data-i18n="mic_f4">Import and export individual presets or full system backups anytime</span></li>
+          </ul>
+        </div>
+        <div class="split-img-box">
+          <img src="screenshot_measurement.png" alt="wDSP Pro Acoustic Cabin Measurement">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: ENHANCED MCU -->
+  <section id="mcu" style="background: rgba(16, 21, 32, 0.45); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow" data-i18n="sec2_eyebrow">Exclusive to Pro</div>
+        <h2 class="section-title" data-i18n="sec2_title">What The Enhanced MCU Unlocks</h2>
+        <p class="section-desc" data-i18n="sec2_desc">Factory firmware locks rear speakers to the front ones and fixes EQ bandwidth. With the Enhanced MCU installed directly from wDSP Pro, the physical audio processor unlocks its true capabilities.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🎚️</div>
+          <h3 data-i18n="mcu_f1_title">Front & Rear Split EQ</h3>
+          <p data-i18n="mcu_f1_desc">Independent 16-band equalizers for the front row and rear passengers. Tune crisp vocal stage upfront while keeping soothing ambient sound in the rear.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📐</div>
+          <h3 data-i18n="mcu_f2_title">Bandwidth (Narrow or Wide)</h3>
+          <p data-i18n="mcu_f2_desc">Choose narrow or wide bandwidth for each frequency band. Narrow bandwidth helps suppress specific interior resonances, while wide bandwidth shapes smooth, musical tone.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔊</div>
+          <h3 data-i18n="mcu_f3_title">Hardware Loudness</h3>
+          <p data-i18n="mcu_f3_desc">True physical contouring processed directly inside the sound chip. Enjoy punchy, textured bass and sparkling highs even at whisper-quiet night volumes without ear fatigue.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🚗</div>
+          <h3 data-i18n="mcu_f4_title">Linkwitz-Riley 4th Order</h3>
+          <p data-i18n="mcu_f4_desc">Steep 24 dB/octave crossovers and 0°/180° subwoofer phase switch. Your sub seamlessly locks with front midbasses, sounding like it punches directly from the dashboard.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🚪</div>
+          <h3 data-i18n="mcu_f5_title">Per-Door Level Balancing</h3>
+          <p data-i18n="mcu_f5_desc">The cabin measurement automatically balances the output level for each door to compensate for speaker sensitivity differences and interior placement.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⏱️</div>
+          <h3 data-i18n="mcu_f6_title">ACC Ignition Delay (0–60 min)</h3>
+          <p data-i18n="mcu_f6_desc">Keeps the head unit powered on for 0 to 60 minutes after switching off ignition — perfect for short stops without a slow cold reboot.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: ACOUSTIC MAGIC (WHAT YOU HEAR) -->
+  <section id="sound">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow" data-i18n="sec3_eyebrow">The Listening Experience</div>
+        <h2 class="section-title" data-i18n="sec3_title">What You Actually Hear On The Road</h2>
+        <p class="section-desc" data-i18n="sec3_desc">You don't need to be an audiophile to appreciate the difference. The moment you tap Enable, your car interior transforms completely.</p>
+      </div>
+
+      <div class="split-row reverse">
+        <div class="split-text">
+          <h3 data-i18n="stage_title">Holographic Soundstage & Time Alignment</h3>
+          <p data-i18n="stage_desc">Because the driver sits closer to the left speaker than the right, stock sound is lopsided and sounds trapped under the door panel. wDSP Pro delays the near speakers by fractions of a millisecond.</p>
+          <ul class="checklist">
+            <li><span class="check-bullet">✓</span> <span data-i18n="stage_f1">The singer appears centered right on your windshield above the steering wheel</span></li>
+            <li><span class="check-bullet">✓</span> <span data-i18n="stage_f2">Guitars, drums, and synthesizers spread across the hood like a live stage</span></li>
+            <li><span class="check-bullet">✓</span> <span data-i18n="stage_f3">Deep, articulate bass without annoying boomy cabin resonance</span></li>
+            <li><span class="check-bullet">✓</span> <span data-i18n="stage_f4">Crystal-clear instrument separation even at highway road speeds</span></li>
+          </ul>
+        </div>
+        <div class="split-img-box">
+          <img src="screenshot_delays.png" alt="wDSP Pro Time Alignment and Acoustic Delays">
+        </div>
+      </div>
+
+      <!-- BEFORE / AFTER COMPARISON -->
+      <div class="compare-container">
+        <div class="compare-card">
+          <h4 data-i18n="comp_stock_title">Stock Head Unit Sound</h4>
+          <div class="compare-subtitle" data-i18n="comp_stock_sub">Factory limitations</div>
+          <ul class="compare-list">
+            <li><span class="icon-cross">✕</span> <span data-i18n="comp_s1">Muffled vocals trapped down near the pedals</span></li>
+            <li><span class="icon-cross">✕</span> <span data-i18n="comp_s2">Boiling, boomy bass that drowns out details</span></li>
+            <li><span class="icon-cross">✕</span> <span data-i18n="comp_s3">Thin, tinny sound at low night listening volume</span></li>
+            <li><span class="icon-cross">✕</span> <span data-i18n="comp_s4">Front and rear locked to identical settings</span></li>
+            <li><span class="icon-cross">✕</span> <span data-i18n="comp_s5">Subwoofer feels separated and delayed in trunk</span></li>
+          </ul>
+        </div>
+
+        <div class="compare-card pro">
+          <h4 style="color: var(--accent-cyan);" data-i18n="comp_pro_title">wDSP Pro Audio</h4>
+          <div class="compare-subtitle" data-i18n="comp_pro_sub">Hardware-enhanced studio sound</div>
+          <ul class="compare-list">
+            <li><span class="icon-check">✓</span> <span data-i18n="comp_p1">Holographic soundstage centered on windshield</span></li>
+            <li><span class="icon-check">✓</span> <span data-i18n="comp_p2">Tight, punchy, rhythmic bass with zero boom</span></li>
+            <li><span class="icon-check">✓</span> <span data-i18n="comp_p3">Full-bodied warmth and clarity at whisper volumes</span></li>
+            <li><span class="icon-check">✓</span> <span data-i18n="comp_p4">Separate 16-band tuning for front vs rear</span></li>
+            <li><span class="icon-check">✓</span> <span data-i18n="comp_p5">Subwoofer seamlessly locked to the front stage</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: CONVENIENCES & POLISH -->
+  <section id="conveniences" style="background: rgba(16, 21, 32, 0.45); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow" data-i18n="sec4_eyebrow">Crafted for Daily Driving</div>
+        <h2 class="section-title" data-i18n="sec4_title">Thoughtful Conveniences</h2>
+        <p class="section-desc" data-i18n="sec4_desc">Designed with automotive ergonomics: high contrast day/night themes, large touch targets, and full autonomy without tedious tinkering.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3 data-i18n="conv_f1_title">In-App Self-Updates</h3>
+          <p data-i18n="conv_f1_desc">Check for updates, monitor live MB download progress in the background, and install the latest version with a single tap directly inside the app.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🌍</div>
+          <h3 data-i18n="conv_f2_title">Built-In Manual in 27 Languages</h3>
+          <p data-i18n="conv_f2_desc">Comprehensive illustrated documentation built right into the app. Available 100% offline in 27 native languages whenever you want to check a feature.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">✨</div>
+          <h3 data-i18n="conv_f3_title">Screensaver & Visualizer</h3>
+          <p data-i18n="conv_f3_desc">Dynamic audio visualizer and screensaver that pulses gracefully to your music during relaxed night drives or while parked.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔁</div>
+          <h3 data-i18n="conv_f4_title">Player Resume</h3>
+          <p data-i18n="conv_f4_desc">After sleep or restart, wDSP automatically relaunches your last active media player.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🌓</div>
+          <h3 data-i18n="conv_f5_title">Day & Night Themes</h3>
+          <p data-i18n="conv_f5_desc">Day and night themes, switching automatically or manually.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💾</div>
+          <h3 data-i18n="conv_f6_title">Backup & Restore</h3>
+          <p data-i18n="conv_f6_desc">Export your custom tuning presets and full system settings to storage, share them with friends, or restore them instantly after a head unit reset.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: TRIAL & COMMUNITY -->
+  <section id="community">
+    <div class="container">
+      <div class="cta-box">
+        <h2 data-i18n="cta_title">Experience the Sound Yourself</h2>
+        <p data-i18n="cta_desc">Try wDSP Pro completely free with full access to all features. Experience the acoustic difference in your own car first — then support the developers with a licence if you love it.</p>
+        <div class="cta-links">
+          <a href="https://github.com/kostyamat/QFRadio-Releases/releases/tag/wdsp-pro-v1.2.1" class="btn btn-primary" data-i18n="cta_btn_dl">Download wDSP Pro v1.2.1</a>
+          <a href="https://t.me/kostyamat_dev/992" class="btn btn-secondary" target="_blank" rel="noopener" data-i18n="cta_btn_discuss">Join Pro Discussion</a>
+        </div>
+      </div>
+
+      <div class="community-cards">
+        <a href="https://t.me/kostyamat_dev/992" target="_blank" rel="noopener" class="community-card">
+          <div class="community-icon">📢</div>
+          <div class="community-info">
+            <h5 data-i18n="card_kostyamat_title">kostyamat Dev Community</h5>
+            <p data-i18n="card_kostyamat_desc">Discussion of wDSP Pro, MCU enhancements, and automotive firmware patches.</p>
+          </div>
+        </a>
+
+        <a href="https://t.me/wDSPapp/1538" target="_blank" rel="noopener" class="community-card">
+          <div class="community-icon">💬</div>
+          <div class="community-info">
+            <h5 data-i18n="card_wdsp_title">wDSP App Official Group</h5>
+            <p data-i18n="card_wdsp_desc">Author community, acoustic presets exchange, and DSP development talk.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-creds">
+        <strong>wDSP Pro · Community of Devs</strong>
+        <span data-i18n="footer_authors">Volodymyr Chebanenko (khiivl), author of wDSP &amp; kostyamat, author of the mod and MCU patches.</span>
+      </div>
+      <div>
+        <span data-i18n="footer_rights">© 2026 Community of Devs</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- LIGHTWEIGHT CLIENT SCRIPT FOR BILINGUAL SUPPORT -->
+  <script>
+    const translations = {
+      en: {
+        nav_about: "About",
+        nav_sound: "Acoustics",
+        nav_mcu: "Enhanced MCU",
+        nav_conveniences: "Conveniences",
+        nav_community: "Community",
+        btn_get_pro: "Get wDSP Pro",
+        hero_pill: "Built Specifically for QF Head Units · Professional Car Audio",
+        hero_title: "Transform Your Car Interior<br>Into a True Concert Hall",
+        hero_desc: "wDSP Pro bridges digital sound processing with your car's physical hardware: cabin auto-calibration via the head unit's built-in microphone, independent Front and Rear equalizers, adjustable Q-factor, and hardware loudness compensation.",
+        hero_btn_dl: "Download Release v1.2.1",
+        hero_btn_chat: "Discussion & Telegram",
+        stat_eq_title: "Front & Rear Split EQ",
+        stat_eq_sub: "16 independent bands for each row",
+        stat_mic_title: "Microphone Calibration",
+        stat_mic_sub: "Measures car cabin acoustics",
+        stat_sub_title: "Crossover & Phase",
+        stat_sub_sub: "Seamless subwoofer integration",
+        stat_acc_title: "Ignition Off Delay",
+        stat_acc_sub: "Keeps unit awake 0–60 min after ignition off",
+        sec1_eyebrow: "Studio-Grade Audio In Your Car",
+        sec1_title: "Why Stock Android Audio Sounds Flat",
+        sec1_desc: "Standard car stereos treat all car speakers as simple domestic boxes in a symmetrical living room. But a car cabin has reflective glass, sound-absorbing seats, and speakers buried near your ankles. wDSP Pro changes everything.",
+        mic_title: "Microphone Cabin Measurement & Auto-Tuning",
+        mic_desc: "The app measures cabin acoustics using the head unit's built-in microphone. Just sit in the driver's seat and run the acoustic sweep test.",
+        mic_f1: "Detects annoying interior resonance and glass reflections",
+        mic_f2: "Automatically generates a customized acoustic compensation curve",
+        mic_f3: "Fine-tunes balance specifically for your car body style (sedan, SUV, wagon)",
+        mic_f4: "Import and export individual presets or full system backups anytime",
+        sec2_eyebrow: "Exclusive to Pro",
+        sec2_title: "What The Enhanced MCU Unlocks",
+        sec2_desc: "Factory firmware locks rear speakers to the front ones and fixes EQ bandwidth. With the Enhanced MCU installed directly from wDSP Pro, the physical audio processor unlocks its true capabilities.",
+        mcu_f1_title: "Front & Rear Split EQ",
+        mcu_f1_desc: "Independent 16-band equalizers for the front row and rear passengers. Tune crisp vocal stage upfront while keeping soothing ambient sound in the rear.",
+        mcu_f2_title: "Bandwidth (Narrow or Wide)",
+        mcu_f2_desc: "Choose narrow or wide bandwidth for each frequency band. Narrow bandwidth helps suppress specific interior resonances, while wide bandwidth shapes smooth, musical tone.",
+        mcu_f3_title: "Hardware Loudness",
+        mcu_f3_desc: "True physical contouring processed directly inside the sound chip. Enjoy punchy, textured bass and sparkling highs even at whisper-quiet night volumes without ear fatigue.",
+        mcu_f4_title: "Linkwitz-Riley 4th Order",
+        mcu_f4_desc: "Steep 24 dB/octave crossovers and 0°/180° subwoofer phase switch. Your sub seamlessly locks with front midbasses, sounding like it punches directly from the dashboard.",
+        mcu_f5_title: "Per-Door Level Balancing",
+        mcu_f5_desc: "The cabin measurement automatically balances the output level for each door to compensate for speaker sensitivity differences and interior placement.",
+        mcu_f6_title: "ACC Ignition Delay (0–60 min)",
+        mcu_f6_desc: "Keeps the head unit powered on for 0 to 60 minutes after switching off ignition — perfect for short stops without a slow cold reboot.",
+        sec3_eyebrow: "The Listening Experience",
+        sec3_title: "What You Actually Hear On The Road",
+        sec3_desc: "You don't need to be an audiophile to appreciate the difference. The moment you tap Enable, your car interior transforms completely.",
+        stage_title: "Holographic Soundstage & Time Alignment",
+        stage_desc: "Because the driver sits closer to the left speaker than the right, stock sound is lopsided and sounds trapped under the door panel. wDSP Pro delays the near speakers by fractions of a millisecond.",
+        stage_f1: "The singer appears centered right on your windshield above the steering wheel",
+        stage_f2: "Guitars, drums, and synthesizers spread across the hood like a live stage",
+        stage_f3: "Deep, articulate bass without annoying boomy cabin resonance",
+        stage_f4: "Crystal-clear instrument separation even at highway road speeds",
+        comp_stock_title: "Stock Head Unit Sound",
+        comp_stock_sub: "Factory limitations",
+        comp_s1: "Muffled vocals trapped down near the pedals",
+        comp_s2: "Boiling, boomy bass that drowns out details",
+        comp_s3: "Thin, tinny sound at low night listening volume",
+        comp_s4: "Front and rear locked to identical settings",
+        comp_s5: "Subwoofer feels separated and delayed in trunk",
+        comp_pro_title: "wDSP Pro Audio",
+        comp_pro_sub: "Hardware-enhanced studio sound",
+        comp_p1: "Holographic soundstage centered on windshield",
+        comp_p2: "Tight, punchy, rhythmic bass with zero boom",
+        comp_p3: "Full-bodied warmth and clarity at whisper volumes",
+        comp_p4: "Separate 16-band tuning for front vs rear",
+        comp_p5: "Subwoofer seamlessly locked to the front stage",
+        sec4_eyebrow: "Crafted for Daily Driving",
+        sec4_title: "Thoughtful Conveniences",
+        sec4_desc: "Designed with automotive ergonomics: high contrast day/night themes, large touch targets, and full autonomy without tedious tinkering.",
+        conv_f1_title: "In-App Self-Updates",
+        conv_f1_desc: "Check for updates, monitor live MB download progress in the background, and install the latest version with a single tap directly inside the app.",
+        conv_f2_title: "Built-In Manual in 27 Languages",
+        conv_f2_desc: "Comprehensive illustrated documentation built right into the app. Available 100% offline in 27 native languages whenever you want to check a feature.",
+        conv_f3_title: "Screensaver & Visualizer",
+        conv_f3_desc: "Dynamic audio visualizer and screensaver that pulses gracefully to your music during relaxed night drives or while parked.",
+        conv_f4_title: "Player Resume",
+        conv_f4_desc: "After sleep or restart, wDSP automatically relaunches your last active media player.",
+        conv_f5_title: "Day & Night Themes",
+        conv_f5_desc: "Day and night themes, switching automatically or manually.",
+        conv_f6_title: "Backup & Restore",
+        conv_f6_desc: "Export your custom tuning presets and full system settings to storage, share them with friends, or restore them instantly after a head unit reset.",
+        cta_title: "Experience the Sound Yourself",
+        cta_desc: "Try wDSP Pro completely free with full access to all features. Experience the acoustic difference in your own car first — then support the developers with a licence if you love it.",
+        cta_btn_dl: "Download wDSP Pro v1.2.1",
+        cta_btn_discuss: "Join Pro Discussion",
+        card_kostyamat_title: "kostyamat Dev Community",
+        card_kostyamat_desc: "Discussion of wDSP Pro, MCU enhancements, and automotive firmware patches.",
+        card_wdsp_title: "wDSP App Official Group",
+        card_wdsp_desc: "Author community, acoustic presets exchange, and DSP development talk.",
+        footer_authors: "Volodymyr Chebanenko (khiivl), author of wDSP & kostyamat, author of the mod and MCU patches.",
+        footer_rights: "© 2026 Community of Devs"
+      },
+      uk: {
+        nav_about: "Про систему",
+        nav_sound: "Акустика",
+        nav_mcu: "Покращений МСУ",
+        nav_conveniences: "Зручності",
+        nav_community: "Спільнота",
+        btn_get_pro: "Отримати wDSP Pro",
+        hero_pill: "Створено для магнітол QF · Професійний автозвук",
+        hero_title: "Перетворіть салон вашого авто<br>на справжній концертний зал",
+        hero_desc: "wDSP Pro поєднує цифрову обробку звуку з апаратним залізом вашого авто: автокалібрування салону вбудованим мікрофоном магнітоли, роздільні еквалайзери спереду і ззаду, вибір ширини смуг Q та апаратна тонкомпенсація.",
+        hero_btn_dl: "Завантажити реліз v1.2.1",
+        hero_btn_chat: "Обговорення в Telegram",
+        stat_eq_title: "Роздільний EQ Спереду / Ззаду",
+        stat_eq_sub: "По 16 незалежних смуг для кожного ряду",
+        stat_mic_title: "Калібрування мікрофоном",
+        stat_mic_sub: "Вимір акустики салону авто",
+        stat_sub_title: "Кросовер LR4 та фаза",
+        stat_sub_sub: "Безшовна стиковка сабвуфера",
+        stat_acc_title: "Затримка вимкнення ACC",
+        stat_acc_sub: "Тримає магнітолу ввімкненою 0–60 хв",
+        sec1_eyebrow: "Студійний звук у дорозі",
+        sec1_title: "Чому заводський звук Android плоский",
+        sec1_desc: "Звичайна магнітола налаштована так, ніби динаміки стоять у симетричній кімнаті. Але в авто є скло, м'які сидіння, а динаміки вмонтовані внизу дверей. wDSP Pro виправляє це фізично.",
+        mic_title: "Вимір салону мікрофоном та авто-пресет",
+        mic_desc: "Застосунок вимірює акустику салону за допомогою вбудованого мікрофона магнітоли. Просто сядьте на місце водія та запустіть тест акустичного свипу.",
+        mic_f1: "Знаходить стоячі хвилі, гул і відбиття від лобового скла",
+        mic_f2: "Автоматично будує індивідуальну криву компенсації саме під ваше авто",
+        mic_f3: "Враховує тип кузова (седан, кросовер, універсал) та геометрію динаміків",
+        mic_f4: "Зберігайте індивідуальні пресети або повні бекапи налаштувань",
+        sec2_eyebrow: "Лише у версії Pro",
+        sec2_title: "Що дає покращений МСУ",
+        sec2_desc: "Заводська прошивка прив'язує задні динаміки до передніх і фіксує ширину смуг. Покращений МСУ, який встановлюється прямо з wDSP Pro, знімає ці обмеження та відкриває справжні можливості звукового процесора.",
+        mcu_f1_title: "Окремий еквалайзер Спереду / Ззаду",
+        mcu_f1_desc: "Незалежні 16-смугові еквалайзери для переднього та заднього ряду. Спереду — яскравий, чіткий вокал сцени, позаду — м'яке об'ємне заповнення без глухоти.",
+        mcu_f2_title: "Ширина смуги (вузька чи широка)",
+        mcu_f2_desc: "Вибір ширини для кожної смуги — вузька або широка. Вузька смуга допомагає прибрати неприємний резонанс салону, а широка формує плавний і музичний тон.",
+        mcu_f3_title: "Апаратна тонкомпенсація",
+        mcu_f3_desc: "Фізичний контур гучності, що працює безпосередньо в звуковому процесорі. Щільний бас і розбірливий вокал навіть на малій нічній гучності без втоми для слуху.",
+        mcu_f4_title: "Кросовер Linkwitz-Riley 4-го порядку",
+        mcu_f4_desc: "Круті зрізи 24 дБ/октаву та перемикач фази сабвуфера 0°/180°. Сабвуфер перестає гудіти в багажнику і звучить злитно з переднім фронтом прямо з торпеди.",
+        mcu_f5_title: "Вирівнювання рівня кожних дверей",
+        mcu_f5_desc: "Рівень кожних дверей виставляє вимір салону, автоматично вирівнюючи різну чутливість динаміків та особливості їхнього розташування.",
+        mcu_f6_title: "Затримка вимкнення ACC (0–60 хв)",
+        mcu_f6_desc: "Тримає магнітолу ввімкненою від 0 до 60 хвилин після вимкнення запалювання — коротка зупинка на заправці чи біля магазину без холодного старту.",
+        sec3_eyebrow: "Враження від звучання",
+        sec3_title: "Які можливості це відкриває для звуку",
+        sec3_desc: "Вам не обов'язково розбиратися в термінах — різницю чутно з першої секунди після ввімкнення.",
+        stage_title: "Голографічна сцена та часові затримки",
+        stage_desc: "Водій сидить значно ближче до лівого динаміка, тому звичайний звук зміщений і грає в коліна. wDSP Pro компенсує відстань до мілісекунд.",
+        stage_f1: "Вокаліст звучить прямо по центру лобового скла над кермом",
+        stage_f2: "Гітари та інструменти розкриваються по ширині капота, як на живому концерті",
+        stage_f3: "Глибокий, чіткий бас без гудіння салону та вібрацій дверних карт",
+        stage_f4: "Чиста деталізація інструментів навіть на швидкості по трасі",
+        comp_stock_title: "Заводський звук магнітоли",
+        comp_stock_sub: "Обмеження штатної системи",
+        comp_s1: "Глухий вокал грає десь знизу біля ніг",
+        comp_s2: "Гулкий кашоподібний бас, що заглушає деталі",
+        comp_s3: "Плоский звук на тихій гучності ввечері",
+        comp_s4: "Передні й задні динаміки жорстко зв'язані разом",
+        comp_s5: "Сабвуфер відстає десь далеко в багажнику",
+        comp_pro_title: "Звучання wDSP Pro",
+        comp_pro_sub: "Апаратно розкритий студійний процесор",
+        comp_p1: "Чітка голографічна сцена по центру лобового скла",
+        comp_p2: "Швидкий, щільний, пружний бас без гулу",
+        comp_p3: "Глибокий і насичений звук навіть на мінімальній гучності",
+        comp_p4: "Окремі 16 смуг під передній та задній ряд",
+        comp_p5: "Сабвуфер зливається з фронтом в єдиний удар",
+        sec4_eyebrow: "Створено для водія",
+        sec4_title: "Зручність у кожній деталі",
+        sec4_desc: "Автомобільна ергономіка: великі елементи керування, адаптивні теми день/ніч та максимальна автономність.",
+        conv_f1_title: "Автооновлення з програми",
+        conv_f1_desc: "Перевірка нових версій, фонове завантаження з відображенням мегабайтів і встановлення в один дотик прямо з інтерфейсу.",
+        conv_f2_title: "Інструкція 27 мовами всередині",
+        conv_f2_desc: "Повна ілюстрована документація вбудована в саму програму. Доступна офлайн будь-якої миті вашою рідною мовою.",
+        conv_f3_title: "Заставка та візуалізатор",
+        conv_f3_desc: "Динамічний аудіо-візуалізатор і плавна заставка, що оживає в такт музиці під час нічних поїздок чи стоянки.",
+        conv_f4_title: "Відновлення плеєра",
+        conv_f4_desc: "Після сну і перезавантаження wDSP сам запускає останній плеєр.",
+        conv_f5_title: "Теми День / Ніч",
+        conv_f5_desc: "Денна й нічна теми, автоматично або вручну.",
+        conv_f6_title: "Резервні копії налаштувань",
+        conv_f6_desc: "Зберігайте улюблені пресети та повні налаштування у файл, діліться з друзями або відновлюйте після скидання магнітоли.",
+        cta_title: "Почуйте різницю на власні вуха",
+        cta_desc: "Спробуйте wDSP Pro повністю безкоштовно з доступом до всіх функцій. Оцініть новий звук у власному авто — а потім придбайте ліцензію, якщо звучання вам сподобається.",
+        cta_btn_dl: "Завантажити wDSP Pro v1.2.1",
+        cta_btn_discuss: "Обговорення в Telegram",
+        card_kostyamat_title: "Спільнота розробника kostyamat",
+        card_kostyamat_desc: "Обговорення wDSP Pro, покращеного МСУ та автомобільних прошивок.",
+        card_wdsp_title: "Офіційна група wDSP App",
+        card_wdsp_desc: "Спільнота автора, обмін пресетами звучання та новини розробки.",
+        footer_authors: "Volodymyr Chebanenko (khiivl), автор wDSP та kostyamat, автор моду і патчів МСУ.",
+        footer_rights: "© 2026 Community of Devs"
+      }
+    };
+
+    function setLanguage(lang) {
+      if (!translations[lang]) return;
+      localStorage.setItem('wdsp_lang', lang);
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+
+      document.documentElement.lang = lang;
+      if (lang === 'uk') {
+        document.getElementById('btnUk').classList.add('active');
+        document.getElementById('btnEn').classList.remove('active');
+      } else {
+        document.getElementById('btnEn').classList.add('active');
+        document.getElementById('btnUk').classList.remove('active');
+      }
+    }
+
+    document.getElementById('btnEn').addEventListener('click', () => setLanguage('en'));
+    document.getElementById('btnUk').addEventListener('click', () => setLanguage('uk'));
+
+    // Detect saved language or browser preference
+    const saved = localStorage.getItem('wdsp_lang');
+    if (saved === 'uk' || (!saved && (navigator.language || '').toLowerCase().startsWith('uk'))) {
+      setLanguage('uk');
+    } else {
+      setLanguage('en');
+    }
+  </script>
+</body>
+</html>
