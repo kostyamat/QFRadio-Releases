@@ -15,5 +15,14 @@
     "version_name": "1.1",
     "download_url": "https://github.com/kostyamat/QFRadio-Releases/releases/download/smartrds-v1.1/SmartRDS.apk",
     "changelog": "Преміум супутник SmartRDS (розумні логотипи та гео-станції для QFRadio)"
+  },
+  "wdsp_pro": {
+    "package": "com.communityofdevs.wdsp_pro",
+    "version_code": 28,
+    "version_name": "1.2.1",
+    "download_url": "https://github.com/kostyamat/QFRadio-Releases/releases/download/wdsp-pro-v1.2.1/wDSP_Pro-1.2.1.apk",
+    "sha256": "cd7835eeb1d9be4f64f5279df2b07884000c16d245572074cb922efcbcd311ef",
+    "size": 21010020,
+    "changelog": "wDSP Pro 1.2.1: MCU update from the app, the manual inside the app (Settings), a longer trial, equaliser and split-EQ fixes."
   }
 }
