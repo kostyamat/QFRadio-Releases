@@ -21,8 +21,8 @@
     "version_code": 28,
     "version_name": "1.2.1",
     "download_url": "https://github.com/kostyamat/QFRadio-Releases/releases/download/wdsp-pro-v1.2.1/wDSP_Pro-1.2.1.apk",
-    "sha256": "5419c7cd3845e16bae5572e45e8fe2686e3f1976a9b739414f820b7b7926f860",
-    "size": 21054564,
-    "changelog": "wDSP Pro 1.2.1: MCU update from the app, the manual inside the app (Settings), a longer trial, equaliser and split-EQ fixes."
+    "sha256": "ffd355b0d64726883d6ed509c340fa733a0076794d3595d34910adf09a7cdadc",
+    "size": 21086068,
+    "changelog": "wDSP Pro 1.2.1: MCU update from the app, the manual inside the app (Settings), a longer trial, equaliser and split-EQ fixes, LR4 crossover by default, fuller loudness treble, the app version in Settings."
   }
 }
